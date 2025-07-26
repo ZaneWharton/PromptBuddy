@@ -4,7 +4,7 @@ from datetime import datetime
 
 #Pydantic schemas for request validation and output formatting
 
-class PromptRequest(BaseModel):
+class Prompt(BaseModel):
     prompt: str
 
 #Gemini-generate analysis

@@ -1,8 +1,8 @@
 #Run server: uvicorn main:app --reload
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from gemini_wrapper import analyze_prompt
-from schemas import PromptAnalysisGemini, PromptAnalysisDB, PromptRequest
+from gemini_wrapper import analyze_prompt, prompt_suggestion
+from schemas import PromptAnalysisGemini, PromptAnalysisDB, Prompt
 from db import init_db, get_session
 from models import PromptAnalysis
 from sqlmodel import select
@@ -27,7 +27,7 @@ async def root():
 
 #Endpoint to analyze the prompt input by the user
 @app.post("/analyze", response_model=PromptAnalysisGemini)
-async def analyze(req: PromptRequest):
+async def analyze(req: Prompt):
     try:
         result_text = analyze_prompt(req.prompt)
         parsed = json.loads(result_text)
@@ -48,12 +48,22 @@ async def analyze(req: PromptRequest):
         return parsed
     
     except Exception as e:
-        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#Endpoint to return last 10 prompt analysis entries in the database
 @app.get("/history", response_model=List[PromptAnalysisDB])
-def get_history():
+async def get_history():
     with get_session() as session:
         statement = select(PromptAnalysis).order_by(PromptAnalysis.timestamp.desc()).limit(10)
         results = session.exec(statement).all()
         return results
+    
+@app.post("/revise")
+async def revise_prompt(req: Prompt):
+    try:
+        result_text = prompt_suggestion(req.prompt)
+
+        return result_text
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))

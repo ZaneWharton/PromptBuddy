@@ -1,7 +1,7 @@
 const ResultCard = ({ data }) => {
   return (
     <div className="mt-6 bg-gray-100 rounded-3xl text-left p-4">
-      <h2 className="text-xl font-bold text-center mb-2">Analysis Result</h2>
+      <h1 className="text-xl font-bold text-center mb-2">Analysis Result</h1>
 
       <div className="text-center mb-2">
         <strong>Intent:</strong> {data.intent || "N/A"}

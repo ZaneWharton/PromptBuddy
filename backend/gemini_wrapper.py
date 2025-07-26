@@ -75,3 +75,40 @@ def analyze_prompt(prompt: str) -> str:
     except Exception as e:
         print(f"Error calling Gemeni API: {e}")
         return json.dumps({"error": str(e)})
+
+def prompt_suggestion(prompt: str) -> str:
+    gemini_prompt = f"""
+        You are a skilled prompt refinement expert.
+
+        Your task is to rewrite the user's prompt adhering to the following criteria:
+        -Clearity: Ensure every part of the prompt is unambiduous and easy to understand.
+        -Effectivenes: Optimize the prompt to elicit the most reliable and precise responst from a large language model.
+        -Safety: Identify and mitigate potential risks (e.g., hallucination, bias, misinterpretation).
+        -Conciseness: Be as direct as possible without losing necessary detail.
+        -Completeness: Include ALL necessary context and information for the large language model.
+        
+        Keep the original intent of the prompt, rewrite it to improve its quality based on the criteria previously mentioned.
+
+        Output only the revised prompt.
+
+        Original Prompt:
+        ```
+        {prompt}
+        ```
+        Ensure your response is ONLY the revised prompt and nothing else.
+        """
+    
+    try:
+        response = client.models.generate_content(
+            model="gemini-1.5-flash-latest", contents=gemini_prompt
+        )
+        return response.text
+    
+    except Exception as e:
+        print(f"Error calling Gemeni API: {e}")
+        return json.dumps({"error": str(e)})
+
+
+
+
+

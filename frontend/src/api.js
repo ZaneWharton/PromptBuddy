@@ -7,3 +7,7 @@ export const API = axios.create({
 export const analyzePrompt = (prompt) => {
     return API.post("/analyze", { prompt })
 }
+
+export const revisePrompt = (prompt) => {
+    return API.post("/revise", { prompt })
+}
