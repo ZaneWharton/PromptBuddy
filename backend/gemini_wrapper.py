@@ -28,7 +28,7 @@ def analyze_prompt(prompt: str) -> str:
             "suggestions": [
                 "string (actionable advice for rephrasing, improving clarity, mitigating risks, or enhancing format)"
             ],
-            "confidence_score": "float (0.0 to 1.0, indicating confidence in analysis)"
+            "confidence_score": "float (0.0 to 1.0, indicating confidence in prompt effectiveness)"
         }}
         ```
         If a category has no findings, provide an empty array for lists or an empty string for single values.
@@ -49,7 +49,8 @@ def analyze_prompt(prompt: str) -> str:
             - Suggestions for better formatting (e.g., using bullet points, code blocks).
             - Strategies to mitigate identified risks.
             - Ways to make the prompt more efficient or effective.
-        - confidence_score: A float between 0.0 and 1.0 representing your confidence in the thoroughness and accuracy of your analysis.
+        - confidence_score: A float between 0.0 and 1.0 representing your confidence in the thoroughness and accuracy of the prompt. Only give a score above 0.9 if the prompt is extremely clear,
+          unambiguous, and low-risk. Score below 0.5 if there is major ambiguity, unclear intent, or multiple risk flags.
 
         User Prompt to Analyze:
         ```

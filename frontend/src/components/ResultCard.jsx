@@ -1,8 +1,6 @@
-import React from "react";
-
 const ResultCard = ({ data }) => {
   return (
-    <div className="mt-6 bg-gray-100 p-4 rounded-3xl shadow text-left">
+    <div className="mt-6 bg-gray-100 rounded-3xl text-left p-4">
       <h2 className="text-xl font-bold text-center mb-2">Analysis Result</h2>
 
       <div className="text-center mb-2">
@@ -34,6 +32,9 @@ const ResultCard = ({ data }) => {
             <li key={i}>{item}</li>
           )) : <li>None</li>}
         </ul>
+      </div>
+      <div className="text-center mb-2">
+        <strong>Prompt Confidence:</strong> {data.confidence_score || "N/A"}
       </div>
     </div>
   );
