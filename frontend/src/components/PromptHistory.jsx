@@ -14,7 +14,7 @@ const PromptHistory = () => {
 
     return (
         <div className="mt-12 max-w-7xl mx-auto">
-            <h2 className="text-3xl font-extrabold text-center text-white mb-4">Prompt History</h2>
+            <h1 className="text-3xl font-extrabold text-center text-white mb-4">Prompt History</h1>
             {loading ? (
                 <p className="text-gray-400 text-center text-xl animate-pulse">Loading...</p>
             ) : (
