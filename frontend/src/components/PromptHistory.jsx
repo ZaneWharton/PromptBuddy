@@ -5,20 +5,21 @@ const PromptHistory = () => {
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    //Fetch history data on mount
     useEffect(() => {
     API.get("/history")
         .then((res) => setHistory(res.data))
-        .catch((err) => console.error("Failed to load prompt history", err))
+        .catch((err) => console.error(err.response?.data?.error || "Failed to load prompt history."))
         .finally(() => setLoading(false));
     }, []);
 
     return (
-        <div className="mt-12 max-w-7xl mx-auto">
+        <div className="mt-4 max-w-7xl mx-auto">
             <h1 className="text-3xl font-extrabold text-center text-white mb-4">Prompt History</h1>
             {loading ? (
                 <p className="text-gray-400 text-center text-xl animate-pulse">Loading...</p>
             ) : (
-            <div className="overflow-hidden rounded-2xl shadow-2xl border border-white/20">
+            <div className="overflow-hidden rounded-2xl shadow-2xl border border-white/20 shadow-4xl shadow-blue-500/20">
                 <table className="min-w-full bg-white/5 text-white">
                     <thead className="bg-white/10 text-left uppercase border border-white/20">
                     <tr>
@@ -31,8 +32,14 @@ const PromptHistory = () => {
                     <tbody className="divide-y divide-white/10">
                     {history.map((item) => (
                         <tr key={item.id} className="hover:bg-white/10 transition-colors duration-200">
+                        
+                        {/* Prompt */}
                         <td className="py-4 px-6 max-w-xs truncate">{item.prompt}</td>
+
+                        {/* Intent */}
                         <td className="py-4 px-6">{item.intent}</td>
+                        
+                        {/* Risk tags */}
                         <td className="py-4 px-6 flex flex-wrap gap-2">
                             {item.risks.length > 0 ? ( 
                                 item.risks.map((risk, i) => (
@@ -47,6 +54,8 @@ const PromptHistory = () => {
                                 <span className="px-3 py-1 text-xs font-medium bg-green-700/40 text-white rounded-full shadow-sm">None</span>
                             )}
                         </td>
+
+                        {/* Color coded confidence score */}
                         <td className="py-4 px-6">
                             <span
                             className={`font-semibold ${

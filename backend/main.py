@@ -82,7 +82,7 @@ async def get_analytics():
     normalized_intents = [normalize_intent(p.intent) for p in prompts]
     normalized_risks = [normalize_risks(p.risks) for p in prompts]
 
-    #Flatten the risks list to use wuth counter
+    #Flatten the risks list to use with counter
     flattened_risks = [risk for sublist in normalized_risks for risk in sublist]
 
     #Amt of occurences for each intent and risk

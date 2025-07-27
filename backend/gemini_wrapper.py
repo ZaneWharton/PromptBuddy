@@ -81,8 +81,8 @@ def prompt_suggestion(prompt: str) -> str:
         You are a skilled prompt refinement expert.
 
         Your task is to rewrite the user's prompt adhering to the following criteria:
-        -Clearity: Ensure every part of the prompt is unambiduous and easy to understand.
-        -Effectivenes: Optimize the prompt to elicit the most reliable and precise responst from a large language model.
+        -Clarity: Ensure every part of the prompt is unambiguous and easy to understand.
+        -Effectiveness: Optimize the prompt to elicit the most reliable and precise response from a large language model.
         -Safety: Identify and mitigate potential risks (e.g., hallucination, bias, misinterpretation).
         -Conciseness: Be as direct as possible without losing necessary detail.
         -Completeness: Include ALL necessary context and information for the large language model.
@@ -107,8 +107,3 @@ def prompt_suggestion(prompt: str) -> str:
     except Exception as e:
         print(f"Error calling Gemeni API: {e}")
         return json.dumps({"error": str(e)})
-
-
-
-
-

@@ -3,6 +3,7 @@ import { API } from "../api";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, ArcElement, CategoryScale, LinearScale, Tooltip, Legend, Title, PointElement, LineElement } from "chart.js";
 
+//Register necessary chart components
 ChartJS.register(
   BarElement,
   ArcElement,
@@ -19,19 +20,73 @@ const AnalyticsDashboard = () => {
     const [analytics, setAnalytics] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    //Fetch analytics data upon mount
     useEffect(() => {
         API.get("/analytics")
             .then((res) => setAnalytics(res.data))
-            .catch((err) => console.error("Failed to load prompt history", err))
+            .catch((err) => console.error("Failed to load analytics data", err))
             .finally(() => setLoading(false));
         }, []);
 
-    if (loading) {
+    //Show loading screen while data is being fetched ot if structure is invalid
+    if (loading || !analytics || !analytics.intents || !analytics.risks) {
         return(
             <p className="text-gray-400 text-center text-xl animate-pulse">Loading...</p>
         )
     }
 
+    //Reusable chart options with optional axis
+    const getChartOptions = (titleText, includeScales = false) => {
+        const options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        color: "white"
+                    }
+                },
+                title: {
+                    display: true,
+                    text: titleText,
+                    font: {
+                        size: 18
+                    },
+                    color: "white"
+                }
+            },
+        }
+        if (includeScales) {
+            options.scales = {
+                x: {
+                    ticks: {
+                        color: "white"
+                    },
+                    grid: {
+                        color: "rgba(255, 255, 255, 0.5)",
+                        borderColor: "white"
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: "white",
+                        stepSize: 0.1
+                    },
+                    min: 0,
+                    max: 1,
+                    grid: {
+                        color: "rgba(255, 255, 255, 0.5)",
+                        borderColor: "white"
+                    },
+                    beginAtZero: true
+                }
+            };
+        }
+        return options;
+    };
+
+    //Chart data
     const intentData = {
         labels: Object.keys(analytics.intents),
         datasets: [
@@ -99,54 +154,30 @@ const AnalyticsDashboard = () => {
             ],
         };
 
-
-     return (
-        <div className="max-w-4xl mx-auto mt-8 p-6 text-black rounded-xl shadow-lg">
-            <h1 className="text-3xl font-extrabold text-center text-white mb-4">Analytics Dashboard</h1>
-            <p className="text-xl font-extrabold text-center text-white mb-4">Total Analyses: {analytics.total}</p>
+    //Render dashboard UI
+    return (
+        <div className="max-w-4xl mx-auto p-6 text-white rounded-xl">
+            <h1 className="text-3xl font-extrabold text-center mb-4">Analytics Dashboard</h1>
             
-            <div className="flex gap-24 mt-8 mb-20">
-                <div className="bg-white/90 rounded-xl p-4">
-                    <Doughnut data={intentData} options={{
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: "Prompt Intent Distribution",
-                                font: {
-                                    size: 18,
-                                }
-                            },
-                            legend: {
-                                position: "bottom"
-                            }
-                        }
-                    }}/>
+            <div className="grid grid-cols-2 gap-5 mt-5">
+                <div className="bg-white/10 rounded-xl h-80 flex flex-col justify-center p-4 shadow-lg shadow-blue-500/20">
+                    {/* Prompt Intent Distribution Chart */}
+                    <Doughnut data={intentData} options={getChartOptions("Prompt Intent Distribution")}/>
                 </div>
-                <div className="bg-white/90 rounded-xl p-4">
-                    <Doughnut data={riskData} options={{
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: "Prompt Risk Distribution",
-                                font: {
-                                    size: 18,
-                                }
-                            },
-                            legend: {
-                                position: "bottom"
-                            }
-                        }
-                    }}/>
+                <div className="bg-white/10 rounded-xl flex flex-col justify-center p-4 shadow-lg shadow-blue-500/20">
+                    {/* Prompt Risk Distribution Chart */}
+                    <Doughnut data={riskData} options={getChartOptions("Prompt Risk Distribution")}/>
+                </div>
+                <div className="bg-white/10 rounded-xl h-80 flex flex-col justify-center p-4 shadow-lg shadow-blue-500/20">
+                    {/* Average Confidence per Intent Chart */}
+                    <Bar data={avgConfidenceByIntent} options={getChartOptions("Average Confidence by Intent", true)} />
+                </div>
+                <div className="bg-white/10 rounded-xl flex flex-col justify-center p-4 shadow-lg shadow-blue-500/20">
+                    {/* Average Confidence per Risk Chart */}
+                    <Line data={avgConfidenceByRisk} options={getChartOptions("Average Confidence by Risk", true)}/>
                 </div>
             </div>
-            <div className="flex gap-24">
-                <div className="bg-white/90 rounded-xl p-4">
-                    <Bar data={avgConfidenceByIntent} />
-                </div>
-                <div className="bg-white/90 rounded-xl p-4">
-                    <Line data={avgConfidenceByRisk} />
-                </div>
-            </div>
+            <p className="text-xl font-extrabold text-center mt-8">Total Analyses Performed: {analytics.total}</p>
         </div>
      );
 }
