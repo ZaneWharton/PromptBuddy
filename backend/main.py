@@ -121,20 +121,27 @@ async def get_analytics():
 def normalize_intent(raw_intent: str) -> str:
     raw = raw_intent.lower()
 
-    if any(keyword in raw for keyword in ["summary", "summarize", "summarizing"]):
+    if any(keyword in raw for keyword in ["summary", "summarize", "summarizing", "brief", "concise", "abstract", "condense", "recap", "synopsis", "overview", "main points"]):
         return "summarize"
-    if any(keyword in raw for keyword in ["generate", "generation", "create"]):
+
+    if any(keyword in raw for keyword in ["generate", "generation", "create", "write", "compose", "draft", "produce", "formulate", "make", "design", "author"]):
         return "generate"
-    if any(keyword in raw for keyword in ["calculate", "compute", "calculation"]):
+
+    if any(keyword in raw for keyword in ["calculate", "compute", "calculation", "determine", "figure out", "evaluate", "solve", "measure", "quantify"]):
         return "calculate"
-    if any(keyword in raw for keyword in ["answer", "question", "query"]):
+
+    if any(keyword in raw for keyword in ["answer", "question", "query", "explain", "define", "what is", "how to", "tell me about", "clarify", "provide information on", "inquire", "interpret"]):
         return "answer_question"
-    if any(keyword in raw for keyword in ["rephrase", "rewrite", "revise", "revision"]):
+
+    if any(keyword in raw for keyword in ["rephrase", "rewrite", "revise", "revision", "paraphrase", "alter", "change wording", "modify text", "reformulate"]):
         return "rewrite"
-    if any(keyword in raw for keyword in ["extract", "identify", "pull out", "recognition"]):
+
+    if any(keyword in raw for keyword in ["extract", "identify", "pull out", "recognition", "find", "list", "retrieve", "get details", "locate", "itemize", "select", "discern"]):
         return "extract"
+    
     if any(keyword in raw for keyword in ["unknown"]):
         return "unknown"
+    
     return "other"
 
 def normalize_risks(raw_risks: list[str]) -> list[str]:
