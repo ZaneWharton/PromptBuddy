@@ -16,7 +16,7 @@ init_db()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://promptbuddy-omega.vercel.app/"], 
+    allow_origins=["https://promptbuddy-omega.vercel.app"], 
     allow_methods=["*"],
     allow_headers=["*"],
 )
