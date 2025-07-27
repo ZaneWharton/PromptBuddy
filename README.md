@@ -1,8 +1,8 @@
-#PromptBuddy
+# PromptBuddy
 
 PromptBuddy is designed to help you write clearer, smarter, and more effective prompts for LLMs.
 
-##Features
+## Features
 
 **Prompt Analysis**
 -Understand the intent, ambiguity, and risks involved with your prompt. Gain actionable insights and improvement suggestions.
@@ -19,7 +19,7 @@ PromptBuddy is designed to help you write clearer, smarter, and more effective p
 **Modern UI**
 -Clean and polished design using Tailwind CSS and React
 
-##Tech Stack
+## Tech Stack
 
 **Frontend**
 -React
@@ -34,7 +34,7 @@ PromptBuddy is designed to help you write clearer, smarter, and more effective p
 -Gemini API
 -SQLite Database
 
-##Getting Started
+## Getting Started
 
 **Clone the Repo**
 ```
@@ -50,7 +50,7 @@ python -m venv .venv
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
--Note: The app is configured for deployment. In main.py CORSHEADERS replace the allowed origins with '*'. Create a .env file with the environment variable GEMINI_API_KEY=your_api_key
+-Note: For local development, open main.py and set CORS origins to '*'. Then create a .env file with the environment variable GEMINI_API_KEY=your_api_key
 
 **Setup Frontend**
 ```
@@ -59,7 +59,7 @@ npm install
 npm start
 ```
 
-##Deployment
+## Deployment
 
 This app is deployed using Render for the Backend and Vercel for the Frontend.
-Visit https://promptbuddy-omega.vercel.app/ for a live demo!
+**Live Demo:** https://promptbuddy-omega.vercel.app/
